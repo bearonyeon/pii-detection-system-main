@@ -6,9 +6,13 @@
 
 - **목적:** 파일 업로드 시 개인정보 자동 탐지 및 위험도 분석
 - **탐지 대상:** 11종 개인정보 (주민등록번호, 여권번호, 신용카드 등)
+- **핵심 기능:**
+  - **백엔드 A:** 11종 개인정보 패턴 자동 탐지 및 위험도 분석
+  - **백엔드 B:** 분석 결과 DB 저장 및 맞춤형 보안 가이드라인 생성
+  - **프론트엔드:** 실시간 분석 결과 확인 및 과거 이력 조회가 가능한 반응형 대시보드
 - **지원 파일:** PDF, Excel, Word, CSV, TXT, 이미지 등
 
-### 백엔드 실행
+### 백엔드 A 실행
 ```bash
 cd backend
 
@@ -30,26 +34,52 @@ python app.py
 
 서버가 http://localhost:5000 에서 실행됩니다.
 
+### 백엔드 B 실행
+```bash
+cd backend
+
+# 가상환경 생성 및 활성화
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# Mac/Linux
+source venv/bin/activate
+
+# 라이브러리 설치
+pip install -r requirements.txt
+
+# 서버 실행
+uvicorn main:app --reload
+```
+
+서버가 http://localhost:8000 에서 실행됩니다.
+
 ### 프론트엔드 실행
 ```bash
 # 새 터미널 열기
 cd frontend
 
 # 브라우저에서 index.html 파일 열기
-# 또는 Live Server 사용 (VS Code 확장)
 ```
 
 ## 📂 프로젝트 구조
 ```
 pii-detection-system/
-├── backend/              # 백엔드 (Flask API)
-│   ├── app.py           # 메인 서버 코드
-│   └── requirements.txt # 필요 라이브러리
-├── frontend/            # 프론트엔드 (HTML/JS)
-│   └── index.html       # UI 대시보드
-├── test_files/          # 테스트 파일
-│   └── README.md        #테스트 파일 설명
-└── README.md           # 프로젝트 설명
+├── backend/              # 백엔드 A (Flask API)
+│   ├── app.py            # 메인 서버 코드
+│   └── requirements.txt  # 필요 라이브러리
+├── backend-guideline/    # 백엔드 B (FastAPI)
+│   ├── main.py           # 가이드라인 생성
+│   ├── database.py       # SQLite DB 연결 설정
+│   ├── models.py         # SQLAlchemy 데이터 모델
+│   └── requirements.txt  # 필요 라이브러리
+├── frontend/             # 프론트엔드 (HTML/JS)
+│   └── index.html        # UI 대시보드
+├── test_files/           # 테스트 파일
+│   └── README.md         #테스트 파일 설명
+└── README.md             # 프로젝트 설명
 ```
 
 ## 🔧 기술 스택
@@ -88,6 +118,7 @@ pii-detection-system/
 
 ## 📖 API 문서
 
+### Backend A
 ### POST /api/analyze
 파일을 업로드하여 개인정보를 분석합니다.
 
@@ -134,6 +165,9 @@ Body: files (파일 배열)
 }
 ```
 
+### Backend B
+### GET /api/history
+DB에 저장된 모든 분석 이력과 생성된 보안 가이드라인을 조회합니다.
 
 ## 📝 라이선스
 
